@@ -1,0 +1,47 @@
+cache_folder: /content/llm/cache
+
+embeddings:
+  embeddings_path: /content/llm/embeddings
+  document_settings:
+  - doc_path: /content/sample_docs/
+    scan_extensions:
+      - md
+      - pdf
+    additional_parser_settings:
+      md:
+        skip_first: True
+        merge_sections: True
+        remove_images: True
+    chunk_size: 512
+
+semantic_search:
+  search_type: similarity # mmr
+  max_char_size: 3096
+
+
+llm:
+ type: llamacpp
+ params:
+   model_path: /content/llm/models/llama-7b.ggmlv3.q8_0.bin
+   prompt_template: |
+         ### Instruction:
+         Use the following pieces of context to provide detailed answer the question at the end. If answer isn't in the context, say that you don't know, don't try to make up an answer.
+
+         ### Context:
+         ---------------
+         {context}
+         ---------------
+
+         ### Question: {question}
+         ### Response:
+   model_init_params:
+     n_ctx: 4096
+     n_batch: 512
+     n_gpu_layers: 43
+
+   model_kwargs:
+     max_tokens: 1112
+     top_p: 0.2
+     top_k: 40
+     temperature: 0.2
+
